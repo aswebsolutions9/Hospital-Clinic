@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS Healthcare | Advanced Medical Excellence</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #007AFF;
+            --secondary: #00D4FF;
+            --accent: #E0F2FE;
+            --white: #ffffff;
+            --light-grey: #F8FAFC;
+            --medical-blue: #0F172A;
+            --text-main: #1E293B;
+            --text-light: #64748B;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark-mode {
+            --white: #0F172A;
+            --light-grey: #1E293B;
+            --text-main: #F1F5F9;
+            --text-light: #94A3B8;
+            --glass: rgba(15, 23, 42, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--light-grey);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.5s ease;
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+        }
+
+        #cursor-blur {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 122, 255, 0.15);
+            filter: blur(10px);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            transition: transform 0.15s ease-out;
+        }
+
+        /* --- LOADER --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--white);
+            z-index: 100000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .heartbeat-loader {
+            width: 100px;
+            height: 100px;
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: heartbeat 2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { stroke-dashoffset: 500; }
+            40% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -500; }
+        }
+
+        /* --- TOPBAR --- */
+        .top-bar {
+            background: var(--medical-blue);
+            color: white;
+            padding: 10px 10%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .emergency-pill {
+            background: #EF4444;
+            padding: 2px 12px;
+            border-radius: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            position: sticky;
+            top: 20px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 15px 40px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-btns {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 122, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 122, 255, 0.3);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: 100px 10% 150px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            min-height: 90vh;
+            position: relative;
+        }
+
+        .hero-text {
+            flex: 1;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        .hero-visual {
+            flex: 1;
+            position: relative;
+        }
+
+        .main-img {
+            width: 100%;
+            border-radius: 30px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            z-index: 2;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* --- FEATURES --- */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            padding: 0 10%;
+            margin-top: -80px;
+        }
+
+        .f-card {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .f-card:hover {
+            transform: translateY(-10px);
+            background: var(--primary);
+            color: white;
+        }
+
+        .f-card:hover p { color: rgba(255,255,255,0.8); }
+
+        /* --- DEPARTMENTS --- */
+        .section-padding {
+            padding: 120px 10%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .dept-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .dept-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .dept-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 30px 60px rgba(0,122,255,0.1);
+        }
+
+        .dept-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--accent);
+            border-radius: 20px;
+            display: flex;
+            margin: 0 auto 20px;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        /* --- FORM --- */
+        .booking-section {
+            background: var(--medical-blue);
+            border-radius: 50px;
+            padding: 80px;
+            display: flex;
+            gap: 50px;
+            color: white;
+        }
+
+        .booking-form {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            padding: 40px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        input, select {
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            width: 100%;
+        }
+
+        /* --- REVEAL ANIMATION --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 1s all ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            background: var(--white);
+            padding: 80px 10% 40px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        /* --- DNA ANIMATION --- */
+        .dna-bg {
+            position: absolute;
+            top: 0; right: 0;
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 1024px) {
+            .hero { flex-direction: column; text-align: center; }
+            .hero h1 { font-size: 3rem; }
+            .dept-grid, .features { grid-template-columns: 1fr; }
+            .hero-visual { display: none; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CUSTOM CURSOR -->
+    <div id="cursor"></div>
+    <div id="cursor-blur"></div>
+
+    <!-- LOADER -->
+    <div id="loader">
+        <svg class="heartbeat-loader" viewBox="0 0 150 100">
+            <path d="M0,50 L40,50 L50,20 L70,80 L80,50 L150,50" />
+        </svg>
+        <h2 style="color: var(--primary); margin-top: 20px; letter-spacing: 2px;">AS HEALTHCARE</h2>
+    </div>
+
+    <!-- TOPBAR -->
+    <div class="top-bar">
+        <div>📍 123 Futuristic Med-Park, Global City</div>
+        <div style="display: flex; gap: 20px;">
+            <span class="emergency-pill">Emergency: 911-000-888</span>
+            <span>🕒 Open 24/7</span>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="logo">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/></svg>
+            AS HEALTHCARE
+        </div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#depts">Departments</a>
+            <a href="#doctors">Doctors</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="nav-btns">
+            <div id="mode-toggle" style="font-size: 1.2rem; cursor: pointer;">🌓</div>
+            <a href="#book" class="btn btn-primary">Book Now</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="dna-bg">
+            <svg width="400" height="800" viewBox="0 0 100 200">
+                <path d="M30,0 Q70,50 30,100 Q70,150 30,200" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                <path d="M70,0 Q30,50 70,100 Q30,150 70,200" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            </svg>
+        </div>
+        <div class="hero-text">
+            <span class="badge">Advanced Healthcare AI</span>
+            <h1>Modern <span>Healthcare</span> For A Better Tomorrow</h1>
+            <p>Experience world-class medical care powered by the latest AI diagnostics and human empathy. Trust the future of health.</p>
+            <div style="display: flex; gap: 20px;">
+                <a href="#book" class="btn btn-primary">Book Appointment</a>
+                <a href="#" class="btn" style="border: 1px solid var(--primary); color: var(--primary);">Emergency Contact</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <img src="https://images.unsplash.com/photo-1631217816660-ad353559d4bc?auto=format&fit=crop&q=80&w=800" alt="Doctor" class="main-img">
+            <div class="floating-card" style="top: 20%; right: -20px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 10px; height: 10px; background: #22C55E; border-radius: 50%;"></div>
+                    <span style="font-weight: 700;">Live Diagnostics</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">Heart Rate: 72 BPM</div>
+            </div>
+            <div class="floating-card" style="bottom: 10%; left: -30px; animation-delay: -3s;">
+                <span style="font-weight: 700; color: var(--primary);">AI Analysis: 99% Accurate</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES STRIP -->
+    <div class="features">
+        <div class="f-card">
+            <div style="font-size: 2.5rem; margin-bottom: 15px;">🚑</div>
+            <h3>24/7 Emergency</h3>
+            <p style="font-size: 0.9rem; margin-top: 10px;">Rapid response team always on standby.</p>
+        </div>
+        <div class="f-card">
+            <div style="font-size: 2.5rem; margin-bottom: 15px;">👨‍⚕️</div>
+            <h3>Expert Doctors</h3>
+            <p style="font-size: 0.9rem; margin-top: 10px;">Top-rated specialists from around the world.</p>
+        </div>
+        <div class="f-card">
+            <div style="font-size: 2.5rem; margin-bottom: 15px;">🔬</div>
+            <h3>Modern Labs</h3>
+            <p style="font-size: 0.9rem; margin-top: 10px;">Futuristic diagnostic and imaging tech.</p>
+        </div>
+        <div class="f-card">
+            <div style="font-size: 2.5rem; margin-bottom: 15px;">💻</div>
+            <h3>Tele-Medicine</h3>
+            <p style="font-size: 0.9rem; margin-top: 10px;">Global consults from your home.</p>
+        </div>
+    </div>
+
+    <!-- DEPARTMENTS -->
+    <section id="depts" class="section-padding">
+        <div class="section-header reveal">
+            <span class="badge">Specializations</span>
+            <h2 style="font-size: 2.5rem;">World-Class Departments</h2>
+        </div>
+        <div class="dept-grid">
+            <div class="dept-card reveal">
+                <div class="dept-icon">❤️</div>
+                <h3>Cardiology</h3>
+                <p style="color: var(--text-light); margin-top: 15px;">Heart care using non-invasive futuristic imaging.</p>
+            </div>
+            <div class="dept-card reveal">
+                <div class="dept-icon">🧠</div>
+                <h3>Neurology</h3>
+                <p style="color: var(--text-light); margin-top: 15px;">Advanced brain and nervous system treatments.</p>
+            </div>
+            <div class="dept-card reveal">
+                <div class="dept-icon">🦴</div>
+                <h3>Orthopedics</h3>
+                <p style="color: var(--text-light); margin-top: 15px;">Precision robotic bone and joint surgeries.</p>
+            </div>
+            <div class="dept-card reveal">
+                <div class="dept-icon">🦷</div>
+                <h3>Dental Care</h3>
+                <p style="color: var(--text-light); margin-top: 15px;">Next-gen cosmetic and restorative dentistry.</p>
+            </div>
+            <div class="dept-card reveal">
+                <div class="dept-icon">👶</div>
+                <h3>Pediatrics</h3>
+                <p style="color: var(--text-light); margin-top: 15px;">Specialized care for the future generation.</p>
+            </div>
+            <div class="dept-card reveal">
+                <div class="dept-icon">💊</div>
+                <h3>General Medicine</h3>
+                <p style="color: var(--text-light); margin-top: 15px;">Comprehensive health screenings for all.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING SECTION -->
+    <section id="book" class="section-padding">
+        <div class="booking-section reveal">
+            <div style="flex: 1;">
+                <h2 style="font-size: 3rem; margin-bottom: 20px;">Book Your Smart Appointment</h2>
+                <p style="opacity: 0.8; margin-bottom: 30px;">Choose your department and specialist. Our AI will automatically verify your slot in seconds.</p>
+                <div style="display: flex; gap: 20px; font-weight: 700;">
+                    <div>✓ Instant Confirmation</div>
+                    <div>✓ Paperless Process</div>
+                </div>
+            </div>
+            <div class="booking-form">
+                <div class="form-grid">
+                    <input type="text" placeholder="Full Name">
+                    <input type="text" placeholder="Phone Number">
+                    <select>
+                        <option>Select Department</option>
+                        <option>Cardiology</option>
+                        <option>Neurology</option>
+                    </select>
+                    <select>
+                        <option>Select Doctor</option>
+                        <option>Dr. Smith (AI Specialist)</option>
+                        <option>Dr. Sarah (Neurologist)</option>
+                    </select>
+                    <input type="date">
+                    <input type="time">
+                </div>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 30px;">Confirm Appointment</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div class="logo">AS HEALTHCARE</div>
+                <p style="color: var(--text-light); margin-top: 20px;">The pinnacle of modern medical science, where technology meets human empathy.</p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                    <a href="#" style="text-decoration: none; color: var(--text-light);">Appointments</a>
+                    <a href="#" style="text-decoration: none; color: var(--text-light);">Find a Doctor</a>
+                    <a href="#" style="text-decoration: none; color: var(--text-light);">Emergency</a>
+                </div>
+            </div>
+            <div>
+                <h4>Departments</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                    <a href="#" style="text-decoration: none; color: var(--text-light);">Cardiology</a>
+                    <a href="#" style="text-decoration: none; color: var(--text-light);">Neurology</a>
+                    <a href="#" style="text-decoration: none; color: var(--text-light);">Radiology</a>
+                </div>
+            </div>
+            <div>
+                <h4>Newsletter</h4>
+                <p style="color: var(--text-light); margin-top: 20px; font-size: 0.8rem;">Get latest health tips and tech updates.</p>
+                <input type="text" placeholder="Email" style="margin-top: 15px; border: 1px solid #ddd; color: #333;">
+            </div>
+        </div>
+        <div style="text-align: center; border-top: 1px solid var(--glass-border); padding-top: 30px; font-size: 0.8rem; color: var(--text-light);">
+            © 2026 AS Web Solutions - All Healthcare Assets Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // --- CUSTOM CURSOR ---
+        const cursor = document.getElementById('cursor');
+        const blur = document.getElementById('cursor-blur');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            setTimeout(() => {
+                blur.style.left = (e.clientX - 15) + 'px';
+                blur.style.top = (e.clientY - 15) + 'px';
+            }, 50);
+        });
+
+        // --- LOADER ---
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 2000);
+        });
+
+        // --- DARK MODE ---
+        const modeToggle = document.getElementById('mode-toggle');
+        modeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // --- REVEAL ON SCROLL ---
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Call once to show elements already in view
+
+        // --- PARALLAX EFFECT ---
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.querySelector('.main-img').style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    </script>
+</body>
+</html>
